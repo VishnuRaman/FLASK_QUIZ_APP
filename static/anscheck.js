@@ -18,9 +18,7 @@ function startScript( current_userId, kingScore) {
 					var scoreElement = document.getElementById("userscore");
 					scoreElement.text = 'Your SCORE is ' + data.score;
 					$("." + selectedId).hide(1000);
-					if(data.score >= kingScore){
-						$("#userscore").append('<img src="/static/img/crown.svg" id="crown">');
-					}
+
 				}
 			);
 			evnt.preventDefault();
