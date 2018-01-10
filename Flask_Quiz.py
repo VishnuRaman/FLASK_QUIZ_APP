@@ -42,7 +42,7 @@ def getScoreboard():
 
 @app.route('/')
 def home():
-    return render_template('index.html', users=getStandings())
+    return render_template('index.html', users=getScoreboard())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
