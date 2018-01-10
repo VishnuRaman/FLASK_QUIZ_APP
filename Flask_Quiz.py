@@ -36,7 +36,7 @@ login_manager.login_message = 'Please login to have access to this page.'
 def load_user(userid):
     return User.query.filter(User.id==int(userid)).first()
 
-def getStandings():
+def getScoreboard():
     users = User.query.order_by(User.score.desc())
     return users
 
@@ -177,7 +177,7 @@ def topicwise(topic):
         questions_to_display = Questions.query.filter(Questions.creatorid != str(current_user.id)).filter(~Questions.questionid.in_(alreadyAns)).filter(Questions.topic == topic).all()
         if len(questions_to_display) is 0:
             flash("We're so sorry but it seems that there are no questions on this topic")
-        return render_template('quiz.html', questions_to_display=questions_to_display, form=form, users=getStandings())
+        return render_template('quiz.html', questions_to_display=questions_to_display, form=form, users=getScoreboard())
     else:
         form = QuizForm()
         if current_user.answered is None:
@@ -188,12 +188,12 @@ def topicwise(topic):
         #Check the questions to display
         questions_to_display = Questions.query.filter(Questions.creatorid != str(current_user.id)).filter( ~Questions.questionid.in_(alreadyAns)).all()
         flash('Please enter a url where the topic is any one of' + str(topicList))
-        return redirect(url_for('quiz.html', questions_to_display=questions_to_display, form=form, users=getStandings()))
+        return redirect(url_for('quiz.html', questions_to_display=questions_to_display, form=form, users=getScoreboard()))
 
 @app.route('/score')
 @login_required
 def scoreboard():
-    # To allow sorting by username just do an ajax request back to score board with argument (like /score/#username then /score/#score)
+
     users = User.query.order_by(User.score.desc())
     return render_template('scoreboard.html', users=users)
 
