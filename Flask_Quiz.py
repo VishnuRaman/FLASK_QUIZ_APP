@@ -11,7 +11,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 # "dumps" return pickled representation of the object as a bytes object, instead of writing it to a file.
 from pickle import loads, dumps
 import json
-from forms import LoginForm, RegisterForm, SubmitForm, QuizForm
+from forms import LoginForm, RegisterForm, QuestionForm, QuizForm
 
 app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
@@ -88,7 +88,7 @@ def logout():
 @app.route('/submit', methods=['GET', 'POST'])
 @login_required
 def submit():
-    form = SubmitForm()
+    form = QuestionForm()
     if form.validate_on_submit():
         questiondata = Questions(question=form.question.data,option1=form.option1.data,option2=form.option2.data,
                                  option3=form.option3.data,option4=form.option4.data,answer=form.answer.data,
@@ -126,12 +126,12 @@ def fetch_answer():
     value = request.args.get('value', 0, type=str)
     userId = request.args.get('userid', 0, type=int)
 
-    # Fetching question and User data
+    # Fetching question and student data
     attempted_question = Questions.query.filter(Questions.questionid == id).all()
     presentUser = User.query.get(userId)
     presentScore = presentUser.score
 
-    # Appropriately changing the USER's score
+    # Appropriately changing the student's score
     if attempted_question[0].answer == value:
         if attempted_question[0].difficulty == 'easy':
             presentScore = presentScore + 1
